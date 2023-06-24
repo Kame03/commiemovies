@@ -50,7 +50,7 @@ export default function Layout({ children }) {
                 </li>
                 <li className="rounded-md">
                   <Link legacyBehavior className="rounded-md" href="/tv">
-                    Tv
+                    TV
                   </Link>
                 </li>
                 <li className="rounded-md">
@@ -76,7 +76,7 @@ export default function Layout({ children }) {
             </li>
             <li>
               <Link legacyBehavior href="/tv">
-                Tv
+                TV
               </Link>
             </li>
             <li>
