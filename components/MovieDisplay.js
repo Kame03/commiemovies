@@ -7,9 +7,18 @@ const MovieDisplay = ({ movie, pageid }) => {
   // Ensure pageid is a number and defaults to 1 if not
   pageid = isNaN(pageid) ? 1 : +pageid;
 
+  // Ensure pageid is within valid range
+  if (pageid < 1) {
+    pageid = 1;
+  }
+  const maxPage = pagenum.length;
+  if (pageid > maxPage) {
+    pageid = maxPage;
+  }
+
   // Render a single pagination item
   const renderPaginationItem = (element) => (
-    <Link legacyBehavior key={element} href={`/movie/popular/page/${element}`} passHref>
+    <Link key={element} href={`/movie/popular/page/${element}`} passHref>
       <a
         className={`bg-gray-800 text-white rounded-full px-4 py-2 hover:bg-gray-700 ${
           pageid === element ? "bg-gray-700" : ""
@@ -34,14 +43,32 @@ const MovieDisplay = ({ movie, pageid }) => {
       </div>
       {/* Render pagination */}
       <div className="flex justify-center mt-8 space-x-4 mb-10">
-        <Link legacyBehavior href={`/movie/popular/page/${pageid - 1}`} passHref>
-          <a className="bg-gray-800 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+        <Link
+          href={`/movie/popular/page/${pageid - 1}`}
+          passHref
+          // Disable Previous button when on the first page
+          aria-disabled={pageid === 1}
+        >
+          <a
+            className={`bg-gray-800 text-white rounded-full px-4 py-2 hover:bg-gray-700 ${
+              pageid === 1 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
             &laquo; Prev
           </a>
         </Link>
         {pagenum.map(renderPaginationItem)}
-        <Link legacyBehavior href={`/movie/popular/page/${pageid + 1}`} passHref>
-          <a className="bg-gray-800 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+        <Link
+          href={`/movie/popular/page/${pageid + 1}`}
+          passHref
+          // Disable Next button when on the last page
+          aria-disabled={pageid === maxPage}
+        >
+          <a
+            className={`bg-gray-800 text-white rounded-full px-4 py-2 hover:bg-gray-700 ${
+              pageid === maxPage ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
             Next &raquo;
           </a>
         </Link>
