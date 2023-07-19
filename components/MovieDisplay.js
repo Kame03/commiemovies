@@ -1,11 +1,12 @@
 import Link from "next/link";
-import MovieCard from "./MovieCards";
+import TvCards from "./TvCards";
 
-const MovieDisplay = ({ movie, pageid }) => {
-  // Create an array of page numbers
+const TvDisplay = ({ tv, pageid = 1 }) => {
+  // Create an array of page numbers for pagination
   const pagenum = Array.from({ length: 10 }, (_, i) => i + 1);
+
   // Ensure pageid is a number and defaults to 1 if not
-  pageid = isNaN(pageid) ? 1 : +pageid;
+  pageid = isNaN(pageid) ? 1 : Number(pageid);
 
   // Ensure pageid is within valid range
   if (pageid < 1) {
@@ -16,35 +17,21 @@ const MovieDisplay = ({ movie, pageid }) => {
     pageid = maxPage;
   }
 
-  // Render a single pagination item
-  const renderPaginationItem = (element) => (
-    <Link key={element} href={`/movie/popular/page/${element}`} passHref>
-      <a
-        className={`bg-gray-800 text-white rounded-full px-4 py-2 hover:bg-gray-700 ${
-          pageid === element ? "bg-gray-700" : ""
-        }`}
-      >
-        {element}
-      </a>
-    </Link>
-  );
-
+  // Return the JSX for the TvDisplay component
   return (
     <div className="popular-movies md:mx-24">
-      {/* Render movie cards */}
+      {/* Display a grid of TV cards */}
       <div className="flex flex-wrap overflow-hidden sm:-mx-2 pl-2 md:-mx-2 lg:-mx-2 xl:-mx-2">
-        {movie?.map((movieCard) => (
-          <MovieCard
-            key={movieCard.id}
-            MovieCard={movieCard}
-            className="justify-center rounded-md"
-          />
+        {tv.map((TvCard) => (
+          <TvCards key={TvCard.id} TvCard={TvCard} />
         ))}
       </div>
-      {/* Render pagination */}
+      {/* Create pagination navigation */}
       <div className="flex justify-center mt-8 space-x-4 mb-10">
+        {/* Previous page link */}
         <Link
-          href={`/movie/popular/page/${pageid - 1}`}
+          legacyBehavior
+          href={`/tv/popular/page/${pageid - 1}`}
           passHref
           // Disable Previous button when on the first page
           aria-disabled={pageid === 1}
@@ -57,9 +44,27 @@ const MovieDisplay = ({ movie, pageid }) => {
             &laquo; Prev
           </a>
         </Link>
-        {pagenum.map(renderPaginationItem)}
+        {/* Page number links */}
+        {pagenum.map((element) => (
+          <Link
+            legacyBehavior
+            key={element}
+            href={`/tv/popular/page/${element}`}
+            passHref
+          >
+            <a
+              className={`bg-gray-800 text-white rounded-full px-4 py-2 hover:bg-gray-700 ${
+                pageid === element ? "bg-gray-700" : ""
+              }`}
+            >
+              {element}
+            </a>
+          </Link>
+        ))}
+        {/* Next page link */}
         <Link
-          href={`/movie/popular/page/${pageid + 1}`}
+          legacyBehavior
+          href={`/tv/popular/page/${pageid + 1}`}
           passHref
           // Disable Next button when on the last page
           aria-disabled={pageid === maxPage}
@@ -77,4 +82,5 @@ const MovieDisplay = ({ movie, pageid }) => {
   );
 };
 
-export default MovieDisplay;
+// Export TvDisplay component as default
+export default TvDisplay;
